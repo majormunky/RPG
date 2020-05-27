@@ -12,7 +12,7 @@ class Player:
 	def update(self, dt):
 		pass
 
-	def draw(self, canvas):
+	def draw(self, canvas, camera):
 		pygame.draw.rect(canvas, self.color, (self.x, self.y, self.width, self.height))
 
 	def get_rect(self):

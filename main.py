@@ -1,5 +1,6 @@
 import pygame
 from Engine.Engine import Engine
+from Engine.Camera import Camera
 from Engine.Grid import Grid
 from Engine.Config import get_screenrect
 from GameObjects.World import World
@@ -11,29 +12,41 @@ class Game:
 		self.screenrect = get_screenrect()
 		self.world = World()
 		self.player = Player()
+		self.camera = Camera()
+
+		# figure out where this should go
+		self.map_pad = 128
 
 	def update(self, dt):
 		pass
 
 	def draw(self, canvas):
-		self.world.draw(canvas)
-		self.player.draw(canvas)
+		camera_rect = self.camera.get_rect()
+		self.world.draw(canvas, camera_rect)
+		self.player.draw(canvas, camera_rect)
 
 	def check_player_position(self, rect):
-		if rect.x < 0 or rect.y < 0:
+		fixed_rect = pygame.Rect(
+			rect.x + self.camera.x,
+			rect.y + self.camera.y,
+			rect.width,
+			rect.height
+		)
+
+		if fixed_rect.x < 0 or fixed_rect.y < 0:
 			return False
 
-		if rect.right > self.world.get_width() or rect.bottom > self.world.get_height():
+		if fixed_rect.right > self.world.get_width() or fixed_rect.bottom > self.world.get_height():
 			return False
 
-		tile_info = self.world.get_tile_at_rect(rect)
+		tile_info = self.world.get_tile_at_rect(fixed_rect)
 		if tile_info["solid"]:
 			return False
 
-		if rect.bottom > self.screenrect.bottom:
+		if fixed_rect.bottom > self.screenrect.bottom:
 			return False
 
-		if rect.right > self.screenrect.right:
+		if fixed_rect.right > self.screenrect.right:
 			return False
 
 		return True

@@ -84,7 +84,7 @@ class World:
 	def update(self, dt):
 		pass
 
-	def draw(self, canvas):
+	def draw(self, canvas, camera):
 		canvas.blit(self.image, (0, 0))
 
 	def handle_event(self, event):
