@@ -5,8 +5,7 @@ from Engine.Grid import Grid
 
 class World:
 	def __init__(self):
-		self.tile_width = 32
-		self.tile_height = 32
+		self.tile_size = 32
 		self.grid = Grid([
 			["0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0"],
 			["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
@@ -33,23 +32,41 @@ class World:
 		self.render_map()
 
 	def get_width(self):
-		return self.grid.width * self.tile_width
+		return self.grid.width * self.tile_size
 
 	def get_height(self):
-		return self.grid.height * self.tile_height
+		return self.grid.height * self.tile_size
 
 	def render_map(self):
 		self.image = pygame.Surface((
-			self.tile_width * self.grid.width,
-			self.tile_height * self.grid.height,
+			self.tile_size * self.grid.width,
+			self.tile_size * self.grid.height,
 		), pygame.SRCALPHA)
 		for y in range(self.grid.height):
 			for x in range(self.grid.width):
 				cell_type = self.grid.get_cell(x, y)
 				cell_info = self.tile_info.get(cell_type, None)
 				if cell_info:
-					pygame.draw.rect(self.image, cell_info["color"], (x * self.tile_width, y * self.tile_height, self.tile_width, self.tile_height))
+					pygame.draw.rect(
+						self.image, 
+						cell_info["color"], 
+						(
+							x * self.tile_size, 
+							y * self.tile_size, 
+							self.tile_size, 
+							self.tile_size
+						)
+					)
 
+
+	def get_tile_at_rect(self, rect):
+		tx = self.pixel_to_tile(rect.x)
+		ty = self.pixel_to_tile(rect.y)
+		tile_info = self.grid.get_cell(tx, ty)
+		return self.tile_info.get(tile_info, None)
+
+	def pixel_to_tile(self, val):
+		return val // self.tile_size
 
 	def update(self, dt):
 		pass
@@ -112,6 +129,10 @@ class Game:
 			return False
 
 		if rect.right > self.world.get_width() or rect.bottom > self.world.get_height():
+			return False
+
+		tile_info = self.world.get_tile_at_rect(rect)
+		if tile_info["solid"]:
 			return False
 
 		return True
