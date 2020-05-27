@@ -39,12 +39,13 @@ class Game:
 			rect.width,
 			rect.height
 		)
+		world_rect = self.world.get_rect()
 
 		if not self.screenrect.contains(rect):
 			print("Player is going to be off of the screen, returning false")
 			return False
 
-		if fixed_rect.right > self.world.get_width() or fixed_rect.bottom > self.world.get_height():
+		if fixed_rect.right > world_rect.width or fixed_rect.bottom > world_rect.height:
 			print("Player is going to be outside of the world, returning false")
 			return False
 
@@ -53,14 +54,13 @@ class Game:
 			print("Player tried to walk on a solid tile, returning false")
 			return False
 
-		map_rect = self.world.get_rect()
 		camera_rect = self.camera.get_rect()
 		has_moved = False
-		if map_rect.contains(rect):
+		if world_rect.contains(rect):
 			if direction == "right":
 				if rect.right > self.screenrect.width - self.map_pad:
 					# player is in an area where we should scroll the camera
-					camera_moved = self.camera.move(camera_rect, map_rect, 32, direction)
+					camera_moved = self.camera.move(camera_rect, world_rect, 32, direction)
 					if not camera_moved:
 						has_moved = True
 				else:
@@ -68,7 +68,7 @@ class Game:
 			if direction == "left":
 				if rect.x < self.map_pad:
 					# player is in an area where we should scroll the camera
-					camera_moved = self.camera.move(camera_rect, map_rect, 32, direction)
+					camera_moved = self.camera.move(camera_rect, world_rect, 32, direction)
 					if not camera_moved:
 						has_moved = True
 				else:
@@ -76,7 +76,7 @@ class Game:
 			if direction == "up":
 				if rect.y < self.map_pad:
 					# player is in an area where we should scroll the camera
-					camera_moved = self.camera.move(camera_rect, map_rect, 32, direction)
+					camera_moved = self.camera.move(camera_rect, world_rect, 32, direction)
 					if not camera_moved:
 						has_moved = True
 				else:
@@ -84,7 +84,7 @@ class Game:
 			if direction == "down":
 				if rect.bottom > self.screenrect.bottom - self.map_pad:
 					# player is in an area where we should scroll the camera
-					camera_moved = self.camera.move(camera_rect, map_rect, 32, direction)
+					camera_moved = self.camera.move(camera_rect, world_rect, 32, direction)
 					if not camera_moved:
 						has_moved = True
 				else:
