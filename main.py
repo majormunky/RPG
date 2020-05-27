@@ -49,10 +49,15 @@ class Game:
 			print("Player is going to be outside of the world, returning false")
 			return False
 
-		tile_info = self.world.get_tile_at_rect(fixed_rect)
-		if tile_info["solid"]:
+		tile = self.world.get_tile_at_rect(fixed_rect)
+
+		if tile["solid"]:
 			print("Player tried to walk on a solid tile, returning false")
 			return False
+		teleport_tile = self.world.is_teleport_tile(tile)
+		if teleport_tile:
+			self.teleport(teleport_tile)
+			return
 
 		camera_rect = self.camera.get_rect()
 		has_moved = False
@@ -90,6 +95,14 @@ class Game:
 				else:
 					has_moved = True
 		return has_moved
+
+	def teleport(self, to):
+		print("TELEPORT: ", to)
+		old_map = self.world.map_name
+		self.world.load_map(to)
+		new_player_pos = self.world.get_teleport_from(old_map)
+		self.player.x = new_player_pos[0] * 32
+		self.player.y = new_player_pos[1] * 32
 
 	def handle_event(self, event):
 		if event.type == pygame.KEYUP:

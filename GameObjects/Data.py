@@ -38,10 +38,10 @@ world_data = {
 		},
 		"tile_size": 32,
 		"teleport_to": {
-            (7, 9): "town",
+            (4, 4): "town",
         },
         "teleport_from": {
-            "town": (7, 10)
+            "town": (4, 5)
         }
 	},
 	"town": {
@@ -71,7 +71,7 @@ world_data = {
 		},
 		"tile_size": 32,
 		"teleport_to": {
-            (7, 9): "world",
+            (7, 11): "world",
         },
         "teleport_from": {
             "world": (7, 10)
