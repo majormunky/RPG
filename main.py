@@ -32,6 +32,12 @@ class World:
 		self.image = None
 		self.render_map()
 
+	def get_width(self):
+		return self.grid.width * self.tile_width
+
+	def get_height(self):
+		return self.grid.height * self.tile_height
+
 	def render_map(self):
 		self.image = pygame.Surface((
 			self.tile_width * self.grid.width,
