@@ -1,12 +1,14 @@
 import pygame
 from Engine.Engine import Engine
 from Engine.Grid import Grid
+from Engine.Config import get_screenrect
 from GameObjects.World import World
 from GameObjects.Player import Player
 
 
 class Game:
 	def __init__(self):
+		self.screenrect = get_screenrect()
 		self.world = World()
 		self.player = Player()
 
@@ -26,6 +28,12 @@ class Game:
 
 		tile_info = self.world.get_tile_at_rect(rect)
 		if tile_info["solid"]:
+			return False
+
+		if rect.bottom > self.screenrect.bottom:
+			return False
+
+		if rect.right > self.screenrect.right:
 			return False
 
 		return True
