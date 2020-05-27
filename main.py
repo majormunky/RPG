@@ -75,19 +75,24 @@ class Player:
 	def draw(self, canvas):
 		pygame.draw.rect(canvas, self.color, (self.x, self.y, self.width, self.height))
 
-	def handle_event(self, event):
+	def get_rect(self):
+		return pygame.Rect(self.x, self.y, self.width, self.height)
+
+	def handle_event(self, event, player_check):
 		if event.type == pygame.KEYUP:
-			new_pos = {"x": self.x, "y": self.y}
+			new_rect = self.get_rect()
 			if event.key == pygame.K_UP:
-				new_pos["y"] -= self.height
+				new_rect.y -= self.height
 			elif event.key == pygame.K_DOWN:
-				new_pos["y"] += self.height
+				new_rect.y += self.height
 			elif event.key == pygame.K_LEFT:
-				new_pos["x"] -= self.width
+				new_rect.x -= self.width
 			elif event.key == pygame.K_RIGHT:
-				new_pos["x"] += self.width
-			self.x = new_pos["x"]
-			self.y = new_pos["y"]
+				new_rect.x += self.width
+			
+			if player_check(new_rect):
+				self.x = new_rect.x
+				self.y = new_rect.y
 
 
 class Game:
@@ -102,8 +107,17 @@ class Game:
 		self.world.draw(canvas)
 		self.player.draw(canvas)
 
+	def check_player_position(self, rect):
+		if rect.x < 0 or rect.y < 0:
+			return False
+
+		if rect.right > self.world.get_width() or rect.bottom > self.world.get_height():
+			return False
+
+		return True
+
 	def handle_event(self, event):
-		self.player.handle_event(event)
+		self.player.handle_event(event, self.check_player_position)
 
 
 def main():
