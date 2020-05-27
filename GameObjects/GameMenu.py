@@ -23,7 +23,7 @@ class GameMenu:
 			self.page_width, 
 			20, 
 			text_color=(255, 255, 255),
-			font_size=24
+			font_size=32
 		)
 		self.render()
 
