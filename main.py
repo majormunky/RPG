@@ -5,6 +5,7 @@ from Engine.Grid import Grid
 from Engine.Config import get_screenrect
 from GameObjects.World import World
 from GameObjects.Player import Player
+from GameObjects.GameMenu import GameMenu
 
 
 class Game:
@@ -13,6 +14,7 @@ class Game:
 		self.world = World()
 		self.player = Player()
 		self.camera = Camera()
+		self.menu = GameMenu()
 
 		# figure out where this should go
 		self.map_pad = 128
@@ -21,9 +23,12 @@ class Game:
 		pass
 
 	def draw(self, canvas):
-		camera_rect = self.camera.get_rect()
-		self.world.draw(canvas, camera_rect)
-		self.player.draw(canvas, camera_rect)
+		if self.menu.active:
+			self.menu.draw(canvas)
+		else:
+			camera_rect = self.camera.get_rect()
+			self.world.draw(canvas, camera_rect)
+			self.player.draw(canvas, camera_rect)
 
 	def check_player_position(self, rect, direction):
 		print("checking player position")
@@ -86,7 +91,14 @@ class Game:
 		return has_moved
 
 	def handle_event(self, event):
-		self.player.handle_event(event, self.check_player_position)
+		if event.type == pygame.KEYUP:
+			if event.key == pygame.K_TAB:
+				self.menu.toggle()
+				return
+		if self.menu.active:
+			self.menu.handle_event(event)
+		else:
+			self.player.handle_event(event, self.check_player_position)
 
 
 def main():
