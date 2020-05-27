@@ -33,7 +33,7 @@ class Game:
 			rect.height
 		)
 
-		if fixed_rect.x < 0 or fixed_rect.y < 0:
+		if not self.screenrect.contains(fixed_rect):
 			return False
 
 		if fixed_rect.right > self.world.get_width() or fixed_rect.bottom > self.world.get_height():
@@ -41,12 +41,6 @@ class Game:
 
 		tile_info = self.world.get_tile_at_rect(fixed_rect)
 		if tile_info["solid"]:
-			return False
-
-		if fixed_rect.bottom > self.screenrect.bottom:
-			return False
-
-		if fixed_rect.right > self.screenrect.right:
 			return False
 
 		return True
