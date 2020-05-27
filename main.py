@@ -61,15 +61,27 @@ class Player:
 		self.height = 32
 		self.x = 0
 		self.y = 0
+		self.color = (0, 0, 200)
 
 	def update(self, dt):
 		pass
 
 	def draw(self, canvas):
-		pygame.draw.rect(canvas, (100, 100, 100), (self.x, self.y, self.width, self.height))
+		pygame.draw.rect(canvas, self.color, (self.x, self.y, self.width, self.height))
 
 	def handle_event(self, event):
-		pass
+		if event.type == pygame.KEYUP:
+			new_pos = {"x": self.x, "y": self.y}
+			if event.key == pygame.K_UP:
+				new_pos["y"] -= self.height
+			elif event.key == pygame.K_DOWN:
+				new_pos["y"] += self.height
+			elif event.key == pygame.K_LEFT:
+				new_pos["x"] -= self.width
+			elif event.key == pygame.K_RIGHT:
+				new_pos["x"] += self.width
+			self.x = new_pos["x"]
+			self.y = new_pos["y"]
 
 
 class Game:
@@ -85,7 +97,7 @@ class Game:
 		self.player.draw(canvas)
 
 	def handle_event(self, event):
-		pass
+		self.player.handle_event(event)
 
 
 def main():
