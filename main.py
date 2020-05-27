@@ -6,12 +6,13 @@ from Engine.Config import get_screenrect
 from GameObjects.World import World
 from GameObjects.Player import Player
 from GameObjects.GameMenu import GameMenu
+from GameObjects import Data
 
 
 class Game:
 	def __init__(self):
 		self.screenrect = get_screenrect()
-		self.world = World()
+		self.world = World(Data.world_data)
 		self.player = Player()
 		self.camera = Camera()
 		self.menu = GameMenu()
