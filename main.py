@@ -3,10 +3,13 @@ from Engine.Engine import Engine
 from Engine.Camera import Camera
 from Engine.Grid import Grid
 from Engine.Config import get_screenrect
+from Engine.AssetManager import set_base_folder
 from GameObjects.World import World
 from GameObjects.Player import Player
 from GameObjects.GameMenu import GameMenu
+from GameObjects.Dialog import Dialog
 from GameObjects import Data
+
 
 
 class Game:
@@ -16,6 +19,7 @@ class Game:
 		self.player = Player()
 		self.camera = Camera()
 		self.menu = GameMenu()
+		self.dialog = Dialog()
 
 		# figure out where this should go
 		self.map_pad = 128
@@ -30,6 +34,8 @@ class Game:
 			camera_rect = self.camera.get_rect()
 			self.world.draw(canvas, camera_rect)
 			self.player.draw(canvas, camera_rect)
+			if self.dialog.active:
+				self.dialog.draw(canvas)
 
 	def check_player_position(self, rect, direction):
 		print("checking player position")
@@ -109,6 +115,9 @@ class Game:
 			if event.key == pygame.K_TAB:
 				self.menu.toggle()
 				return
+			elif event.key == pygame.K_d:
+				self.dialog.toggle()
+				return
 		if self.menu.active:
 			self.menu.handle_event(event)
 		else:
@@ -116,6 +125,7 @@ class Game:
 
 
 def main():
+	set_base_folder("assets/images/")
 	e = Engine(Game)
 	e.game_loop()
 
