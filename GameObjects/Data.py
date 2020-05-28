@@ -29,11 +29,13 @@ world_data = {
 		"tile_info": {
 			"0": {
 				"color": (0, 200, 0),
-				"solid": False
+				"solid": False,
+				"image": "grass 1.png",
 			},
 			"1": {
 				"color": (100, 100, 100),
-				"solid": True
+				"solid": True,
+				"image": "water 1.png",
 			}
 		},
 		"tile_size": 32,
@@ -62,11 +64,13 @@ world_data = {
 		"tile_info": {
 			"0": {
 				"color": (0, 200, 0),
-				"solid": False
+				"solid": False,
+				"image": "grass 1.png",
 			},
 			"1": {
 				"color": (100, 100, 100),
-				"solid": True
+				"solid": True,
+				"image": "water 1.png",
 			}
 		},
 		"tile_size": 32,

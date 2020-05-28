@@ -1,5 +1,6 @@
 import pygame
 from Engine.Grid import Grid
+from Engine.AssetManager import load_image
 
 
 class World:
@@ -56,7 +57,14 @@ class Map:
 		self.grid = Grid(data.get("grid"))
 		self.tile_info = data.get("tile_info")
 		self.image = None
+		self.images = {}
+		self.load_images()
 		self.render()
+
+	def load_images(self):
+		for k, v in self.tile_info.items():
+			i = load_image(v["image"])
+			self.images[v["image"]] = i
 
 	def render(self):
 		self.image = pygame.Surface((self.grid.width * self.tile_size, self.grid.height * self.tile_size), pygame.SRCALPHA)
@@ -69,11 +77,7 @@ class Map:
 				if cell_info:
 					px = x * self.tile_size
 					py = y * self.tile_size
-					pygame.draw.rect(
-						self.image, 
-						cell_info.get("color"), 
-						(px, py, self.tile_size, self.tile_size)
-					)
+					self.image.blit(self.images[cell_info["image"]], (px, py))
 					if cell_key in self.teleport_to.keys():
 						pygame.draw.circle(
 							self.image,
